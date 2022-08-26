@@ -1,0 +1,277 @@
+import Foundation
+import UIKit
+import TTGTags
+
+class SearchViewController: UIViewController {
+
+    private let viewModel = SearchViewModel()
+    
+    private var viewTable = UITableView()
+    private var viewTableLayoutTop = NSLayoutConstraint()
+    private var contentTableHandler: SearchContentTableHandler!
+
+    @IBOutlet weak var mSearchBarBackgroundView: UIView!
+    @IBOutlet weak var mSearchBar: UISearchBar!
+    private let mSearchBarTableView = UITableView()
+    private var mSearchBarTableViewLayoutHeight = NSLayoutConstraint()
+    @IBOutlet weak var mTrendingLabel: UILabel!
+    private let mTagScrollView = TTGTextTagCollectionView()
+    
+    @IBOutlet weak var mDateRangeLabel: UILabel!
+    
+    
+    @IBOutlet weak var resultLabel: UILabel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .background_E5E5E5
+        
+        setupSearchBar()
+        setupTagScrollView()
+        setupTableView()
+        
+        viewModel.typingKeyword.bind { [weak self] text in
+            guard let self = self else { return }
+            self.mSearchBarTableView.isHidden = true
+            self.mSearchBarTableView.reloadData()
+            self.mSearchBarTableView.layoutIfNeeded()
+            self.mSearchBarTableViewLayoutHeight.constant = self.mSearchBarTableView.contentSize.height
+        }
+        
+        viewModel.suggestWords.bind { [weak self] suggestWords in
+            guard let self = self else { return }
+            self.mSearchBarTableView.isHidden = false
+            self.mSearchBarTableView.reloadData()
+            self.mSearchBarTableView.layoutIfNeeded()
+            self.mSearchBarTableViewLayoutHeight.constant = self.mSearchBarTableView.contentSize.height
+        }
+        
+        viewModel.searchedHistories.bind { [weak self] words in
+            guard let self = self else { return }
+            UserDefaultManager.default.searchedHistories = words
+            self.view.endEditing(true)
+            self.mSearchBarTableView.isHidden = true
+            self.mSearchBarTableView.reloadData()
+            self.mSearchBarTableView.layoutIfNeeded()
+            self.mSearchBarTableViewLayoutHeight.constant = self.mSearchBarTableView.contentSize.height
+        }
+        
+        viewModel.popularKeywords.bind { [weak self] keywords in
+            guard let self = self else { return }
+            self.mTagScrollView.removeAllTags()
+            for text in keywords {
+                let content = TTGTextTagStringContent.init(text: text)
+                content.textColor = .hex6C757D
+                content.textFont = UIFont.systemFont(ofSize: 16)
+                
+                let normalStyle = TTGTextTagStyle.init()
+                normalStyle.backgroundColor = .hexF7F7F7
+                normalStyle.extraSpace = CGSize.init(width: 16, height: 16)
+                normalStyle.borderColor = .hexDEE2E6
+                normalStyle.cornerRadius = 4
+                normalStyle.shadowColor = .clear
+                
+                let tag = TTGTextTag.init()
+                tag.content = content
+                tag.style = normalStyle
+                tag.selectedStyle = normalStyle
+
+                self.mTagScrollView.addTag(tag)
+            }
+            self.mTagScrollView.reload()
+        }
+                
+        viewModel.searchedContents.bind { [weak self] searchedContents in
+            guard let self = self else { return }
+            if searchedContents.count == 0 {
+                self.resultLabel.isHidden = false
+                self.view.bringSubviewToFront(self.resultLabel)
+            } else {
+                self.resultLabel.isHidden = true
+            }
+            self.contentTableHandler.searchedContents = searchedContents
+            self.viewTable.reloadData()
+        }
+        
+        viewModel.dateRange.bind { [weak self] dateRange in
+            guard let self = self else { return }
+            self.mDateRangeLabel.text = dateRange.rawValue
+            self.viewModel.loadSearchVods(keyword: self.viewModel.typingKeyword.value)
+        }
+    }
+    
+    func setupSearchBar() {
+        mSearchBar.compatibleSearchTextField.backgroundColor = .clear
+        mSearchBar.borderColor = .hexDEE2E6
+    }
+    
+    func setupTableView() {
+                
+        mSearchBarTableView.dataSource = self
+        mSearchBarTableView.delegate = self
+        mSearchBarTableView.register(SearchBarHistoryCell.self, forCellReuseIdentifier: SearchBarHistoryCell.identifier)
+        mSearchBarTableView.isHidden = true
+        mSearchBarTableView.separatorStyle = .none
+        mSearchBarTableView.isScrollEnabled = false
+        mSearchBarTableView.estimatedRowHeight = 40
+        mSearchBarTableView.rowHeight = UITableView.automaticDimension
+        mSearchBarTableView.borderColor = .hexDEE2E6
+        mSearchBarTableView.borderWidth = 2
+        mSearchBarTableView.cornerRadius = 4
+        
+        viewTable.register(SearchedContentTableViewCell.self, forCellReuseIdentifier: SearchedContentTableViewCell.identifier)
+        contentTableHandler = SearchContentTableHandler(controller: self)
+        viewTable.dataSource = contentTableHandler
+        viewTable.delegate = contentTableHandler
+        viewTable.separatorStyle = .none
+        viewTable.backgroundColor = .background_E5E5E5
+                
+        view.addSubviewForAutoLayout(viewTable)
+        view.addSubviewForAutoLayout(mSearchBarTableView)
+        
+        viewTableLayoutTop = viewTable.topAnchor.constraint(equalTo: mSearchBarBackgroundView.bottomAnchor, constant: 20)
+        NSLayoutConstraint.activate([
+            mSearchBarTableView.topAnchor.constraint(equalTo: mSearchBar.bottomAnchor, constant: -1),
+            mSearchBarTableView.leadingAnchor.constraint(equalTo: mSearchBar.leadingAnchor, constant: 0),
+            mSearchBarTableView.trailingAnchor.constraint(equalTo: mSearchBar.trailingAnchor, constant: 0),
+            viewTableLayoutTop,
+            viewTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+            viewTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            viewTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20)
+        ])
+        mSearchBarTableViewLayoutHeight = mSearchBarTableView.heightAnchor.constraint(equalToConstant: 60)
+        mSearchBarTableViewLayoutHeight.isActive = true
+    }
+
+    func setupTagScrollView() {
+        
+        mTagScrollView.delegate = self
+        mTagScrollView.scrollDirection = .horizontal
+        mTagScrollView.showsHorizontalScrollIndicator = false
+        view.addSubviewForAutoLayout(mTagScrollView)
+
+        NSLayoutConstraint.activate([
+            mTagScrollView.topAnchor.constraint(equalTo: mSearchBar.bottomAnchor, constant: 10),
+            mTagScrollView.heightAnchor.constraint(equalToConstant: 60),
+            mTagScrollView.leadingAnchor.constraint(equalTo: mTrendingLabel.trailingAnchor, constant: 12),
+            mTagScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24)
+        ])
+    }
+    
+    func showTimeSelector() {
+        viewTableLayoutTop.constant = 61
+    }
+    
+    @IBAction func timeSelectorClick(_ sender: UIButton) {
+        let vc = DateRangeSelectorVC()
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+        vc.viewModel.dateRange.value = viewModel.dateRange.value
+        vc.selectedDateRangeCallback = { [weak self] dateRange in
+            guard let self = self else { return }
+            self.viewModel.dateRange.value = dateRange
+        }
+        vc.customDateRangeCallback = { [weak self] fromDate, toDate in
+            guard let self = self else { return }
+            self.viewModel.beginDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: fromDate)
+            self.viewModel.endDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: toDate)
+            self.viewModel.dateRange.value = .customRange
+            self.dismiss(animated: false, completion: nil)
+        }
+        present(vc, animated: true, completion: nil)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+        mSearchBarTableView.isHidden = true
+    }
+}
+
+extension SearchViewController: UISearchBarDelegate {
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text else { return }
+        viewModel.loadSuggestWords(text: text)
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text else { return }
+        if text == "" {
+            return
+        }
+        viewModel.addSearchedHistory(text: text)
+        viewModel.loadSearchVods(keyword: text)
+        showTimeSelector()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let text = searchBar.text else { return }
+        viewModel.loadSuggestWords(text: text)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        viewModel.loadSuggestWords(text: "")
+    }
+}
+
+extension SearchViewController: TTGTextTagCollectionViewDelegate {
+    func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
+        mSearchBar.text = viewModel.popularKeywords.value[Int(index)]
+        viewModel.loadSearchVods(keyword: viewModel.typingKeyword.value)
+        showTimeSelector()
+    }
+}
+
+extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.suggestWords.value.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchBarHistoryCell.identifier, for: indexPath) as? SearchBarHistoryCell else { return UITableViewCell() }
+        cell.configure(data: viewModel, index: indexPath.row)
+        cell.deleteCallback = { [weak self] index in
+            guard let self = self else { return }
+            self.viewModel.suggestWords.value.remove(at: index)
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        mSearchBar.text = viewModel.suggestWords.value[indexPath.row]
+        viewModel.loadSearchVods(keyword: viewModel.suggestWords.value[indexPath.row])
+        showTimeSelector()
+        view.endEditing(true)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let customView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60))
+        let button = UIButton()
+        button.setTitleColor(.hex7F7F7F, for: .normal)
+        button.setTitle("Clear history", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 13)
+        button.addTarget(self, action: #selector(clearHistoryAction(_:)), for: .touchUpInside)
+        button.borderWidth = 1
+        button.cornerRadius = 4
+        button.borderColor = .hexDEE2E6
+        customView.addSubviewForAutoLayout(button)
+        NSLayoutConstraint.activate([
+            button.leadingAnchor.constraint(equalTo: customView.leadingAnchor, constant: 20),
+            button.trailingAnchor.constraint(equalTo: customView.trailingAnchor, constant: -20),
+            button.centerYAnchor.constraint(equalTo: customView.centerYAnchor, constant: 0),
+            button.heightAnchor.constraint(equalToConstant: 33)
+        ])
+        return customView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return viewModel.typingKeyword.value == "" ? 60 : 0
+    }
+    
+     @objc func clearHistoryAction(_ sender: UIButton) {
+         viewModel.searchedHistories.value = []
+     }
+}

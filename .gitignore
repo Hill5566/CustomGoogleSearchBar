@@ -1,0 +1,13 @@
+.gitignore & Swift.gitignore
+
+## User settings
+xcuserdata/
+
+Pods/
+
+.sync
+]con[
+.DS_Store
+
+
+Podfile.lock

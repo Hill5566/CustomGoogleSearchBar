@@ -79,22 +79,22 @@ class SearchViewController: UIViewController {
             self.mTagScrollView.reload()
         }
                 
-        viewModel.users.bind { [weak self] users in
+        viewModel.followers.bind { [weak self] followers in
             guard let self = self else { return }
-            if users.count == 0 {
+            if followers.count == 0 {
                 self.resultLabel.isHidden = false
                 self.view.bringSubviewToFront(self.resultLabel)
             } else {
                 self.resultLabel.isHidden = true
             }
-            self.contentTableHandler.users = users
+            self.contentTableHandler.followers = followers
             self.viewTable.reloadData()
         }
         
         viewModel.dateRange.bind { [weak self] dateRange in
             guard let self = self else { return }
             self.mDateRangeLabel.text = dateRange.rawValue
-            self.viewModel.loadSearchVods(keyword: self.viewModel.typingKeyword.value)
+            self.viewModel.loadUserFollowers(name: self.viewModel.typingKeyword.value)
         }
     }
     
@@ -132,7 +132,7 @@ class SearchViewController: UIViewController {
             mSearchBarTableView.leadingAnchor.constraint(equalTo: mSearchBar.leadingAnchor, constant: 0),
             mSearchBarTableView.trailingAnchor.constraint(equalTo: mSearchBar.trailingAnchor, constant: 0),
             viewTableLayoutTop,
-            viewTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+            viewTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
             viewTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             viewTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20)
         ])
@@ -198,7 +198,7 @@ extension SearchViewController: UISearchBarDelegate {
         }
         viewModel.addSearchedHistory(text: text)
         viewModel.loadSuggestUsers(text: text)
-        viewModel.loadSearchVods(keyword: text)
+        viewModel.loadUserFollowers(name: text)
         showTimeSelector()
     }
     
@@ -216,7 +216,7 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: TTGTextTagCollectionViewDelegate {
     func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
         mSearchBar.text = viewModel.popularKeywords.value[Int(index)]
-        viewModel.loadSearchVods(keyword: viewModel.typingKeyword.value)
+        viewModel.loadUserFollowers(name: viewModel.typingKeyword.value)
         showTimeSelector()
     }
 }
@@ -239,7 +239,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         mSearchBar.text = viewModel.suggestUsers.value[indexPath.row].name
-        viewModel.loadSearchVods(keyword: viewModel.suggestUsers.value[indexPath.row].name)
+        viewModel.loadUserFollowers(name: viewModel.suggestUsers.value[indexPath.row].name)
         showTimeSelector()
         view.endEditing(true)
     }

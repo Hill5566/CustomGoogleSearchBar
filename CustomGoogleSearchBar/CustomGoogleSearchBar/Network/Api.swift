@@ -28,36 +28,83 @@ class Api {
             
             DispatchQueue.main.async {
                 guard error == nil else {
-                    print("Failed request from Weatherbit: \(error!.localizedDescription)")
+                    print("Failed request from \(#function): \(error!.localizedDescription)")
                     completion(nil, .failedRequest)
                     return
                 }
                 
                 guard let data = data else {
-                    print("No data returned from Weatherbit")
+                    print("No data returned from \(#function)")
                     completion(nil, .noData)
                     return
                 }
                 
                 guard let response = response as? HTTPURLResponse else {
-                    print("Unable to process Weatherbit response")
+                    print("Unable to process \(#function) response")
                     completion(nil, .invalidResponse)
                     return
                 }
                 
                 guard response.statusCode == 200 else {
-                    print("Failure response from Weatherbit: \(response.statusCode)")
+                    print("Failure response from \(#function): \(response.statusCode)")
                     completion(nil, .failedRequest)
                     return
                 }
                 
                 do {
                     let decoder = JSONDecoder()
-//                    print(try JSONSerialization.jsonObject(with: data, options: []))                    
+//                    print(try JSONSerialization.jsonObject(with: data, options: []))
                     let users: [User] = try decoder.decode([User].self, from: data)
                     completion(users, nil)
                 } catch {
-                    print("Unable to decode Weatherbit response: \(error.localizedDescription)")
+                    print("Unable to decode \(#function) response: \(error.localizedDescription)")
+                    completion(nil, .invalidData)
+                }
+            }
+        }.resume()
+    }
+    
+    static func getGithubUserFollowers(name: String, completion: @escaping apiCompletion) {
+        
+        guard let url = URL(string: "https://api.github.com/users/\(name)/followers?page=0&per_page=100") else {
+            completion(nil, .failedRequest)
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            
+            DispatchQueue.main.async {
+                guard error == nil else {
+                    print("Failed request from \(#function): \(error!.localizedDescription)")
+                    completion(nil, .failedRequest)
+                    return
+                }
+                
+                guard let data = data else {
+                    print("No data returned from \(#function)")
+                    completion(nil, .noData)
+                    return
+                }
+                
+                guard let response = response as? HTTPURLResponse else {
+                    print("Unable to process \(#function) response")
+                    completion(nil, .invalidResponse)
+                    return
+                }
+                
+                guard response.statusCode == 200 else {
+                    print("Failure response from \(#function): \(response.statusCode)")
+                    completion(nil, .failedRequest)
+                    return
+                }
+                
+                do {
+                    let decoder = JSONDecoder()
+//                    print(try JSONSerialization.jsonObject(with: data, options: []))
+                    let users: [User] = try decoder.decode([User].self, from: data)
+                    completion(users, nil)
+                } catch {
+                    print("Unable to decode \(#function) response: \(error.localizedDescription)")
                     completion(nil, .invalidData)
                 }
             }

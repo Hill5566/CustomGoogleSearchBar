@@ -15,7 +15,7 @@ class SearchViewModel {
         if text == "" {
             suggestUsers.value = searchedHistories.value
         } else {
-            loadsearchRecommendKeywords(prefix: text)
+            loadSearchRecommendKeywords(prefix: text)
         }
     }
     
@@ -50,14 +50,12 @@ class SearchViewModel {
     }
     
     let searchRecommendKeywords:Box<[User]> = Box([])
-    func loadsearchRecommendKeywords(prefix:String) {
+    func loadSearchRecommendKeywords(prefix:String) {
         Api.getGithubUsers { [weak self] users, error in
             guard let self = self, let users = users else { return }
-            if users.count > 5 {
-                self.searchRecommendKeywords.value = Array(users.prefix(upTo: 5))
-            } else {
-                self.searchRecommendKeywords.value = users
-            }
+            
+            self.searchRecommendKeywords.value = users
+            
             self.suggestUsers.value = self.searchRecommendKeywords.value.filter {
                 if let name = $0.name {
                     return name.lowercased().hasPrefix(prefix.lowercased())
@@ -67,18 +65,18 @@ class SearchViewModel {
         }
     }
     
-    let users: Box<[User]> = Box([])
+    let followers: Box<[User]> = Box([])
     let dateRange:Box<DateRange> = Box(.anyTime)
     var beginDate:String? = nil
     var endDate:String? = nil
-    func loadSearchVods(keyword: String?) {
-        typingKeyword.value = keyword ?? ""
-        if keyword == nil {
+    func loadUserFollowers(name: String?) {
+        
+        guard let name = name else { return }
+        if name == "" {
             return
         }
-        if typingKeyword.value == "" {
-            return
-        }
+        typingKeyword.value = name
+
         
         switch dateRange.value {
         case .anyTime:
@@ -103,17 +101,11 @@ class SearchViewModel {
             endDate = nil
         }
         
-//        api.postSearch(keyword:keyword, id: tagId, beginDate: beginDate, endDate: endDate) { [weak self] (searchResults) in
-//            guard let searchResults = searchResults, let self = self else { return }
-//
-//            var vods = [VodContent]()
-//            for result in searchResults {
-//
+        Api.getGithubUserFollowers(name: name) { [weak self] followers, error in
+            guard let followers = followers, let self = self else { return }
+            
+            self.followers.value = followers
+        }
 //                let publishTime:Date? = ISO8601DateFormatter().date(from:result.publishTime) ?? nil
-//
-//                vods.append(VodContent(index: nil, categoryId: "\(result.defaultCategoryID)", categoryName: result.defaultCategoryName, subCategoryId: nil, subCategoryName: nil, id: result.id, name: result.title, contentDescription: result.shortDescription, directors: "", stars: nil, year: nil, ageRatings: nil, imageURL: nil, imageBackgroundURL: result.image, imageHorizontalURL: nil, length: result.length, resolution: nil, orderType: "\(result.type)", trailerPresent: nil, available: nil, watched: nil, purchased: nil, pricings: nil, downloadable: false, tags: nil, scripts: nil, publishTime: publishTime, updated: nil))
-//            }
-//            self.vods.value = vods
-//        }
     }
 }

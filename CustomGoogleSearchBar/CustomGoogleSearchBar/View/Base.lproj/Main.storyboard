@@ -29,7 +29,7 @@
                                     <constraint firstAttribute="height" constant="120" id="13N-E8-urS"/>
                                 </constraints>
                             </view>
-                            <searchBar clipsSubviews="YES" contentMode="redraw" placeholder="Search Video..." translatesAutoresizingMaskIntoConstraints="NO" id="6Zu-lx-WcA">
+                            <searchBar clipsSubviews="YES" contentMode="redraw" placeholder="Search Followers..." translatesAutoresizingMaskIntoConstraints="NO" id="6Zu-lx-WcA">
                                 <rect key="frame" x="20" y="64" width="374" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="QLg-hx-pKS"/>

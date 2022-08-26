@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 class SearchContentTableHandler: NSObject, UITableViewDataSource, UITableViewDelegate {
-    var users: [User] = []
+    var followers: [User] = []
     
     var controller: SearchViewController
     
@@ -12,15 +12,11 @@ class SearchContentTableHandler: NSObject, UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchedContentTableViewCell.identifier, for: indexPath) as? SearchedContentTableViewCell else { return UITableViewCell() }
-        
+        cell.textLabel?.text = followers[indexPath.row].name
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users.count
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 110
+        return followers.count
     }
 }

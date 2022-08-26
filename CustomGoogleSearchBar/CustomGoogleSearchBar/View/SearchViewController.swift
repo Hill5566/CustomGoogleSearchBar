@@ -24,9 +24,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .background_E5E5E5
-        
+                
         setupSearchBar()
         setupTagScrollView()
         setupTableView()
@@ -39,7 +37,7 @@ class SearchViewController: UIViewController {
             self.mSearchBarTableViewLayoutHeight.constant = self.mSearchBarTableView.contentSize.height
         }
         
-        viewModel.suggestWords.bind { [weak self] suggestWords in
+        viewModel.suggestUsers.bind { [weak self] suggestUsers in
             guard let self = self else { return }
             self.mSearchBarTableView.isHidden = false
             self.mSearchBarTableView.reloadData()
@@ -47,9 +45,8 @@ class SearchViewController: UIViewController {
             self.mSearchBarTableViewLayoutHeight.constant = self.mSearchBarTableView.contentSize.height
         }
         
-        viewModel.searchedHistories.bind { [weak self] words in
+        viewModel.searchedHistories.bind { [weak self] users in
             guard let self = self else { return }
-            UserDefaultManager.default.searchedHistories = words
             self.view.endEditing(true)
             self.mSearchBarTableView.isHidden = true
             self.mSearchBarTableView.reloadData()
@@ -82,15 +79,15 @@ class SearchViewController: UIViewController {
             self.mTagScrollView.reload()
         }
                 
-        viewModel.searchedContents.bind { [weak self] searchedContents in
+        viewModel.users.bind { [weak self] users in
             guard let self = self else { return }
-            if searchedContents.count == 0 {
+            if users.count == 0 {
                 self.resultLabel.isHidden = false
                 self.view.bringSubviewToFront(self.resultLabel)
             } else {
                 self.resultLabel.isHidden = true
             }
-            self.contentTableHandler.searchedContents = searchedContents
+            self.contentTableHandler.users = users
             self.viewTable.reloadData()
         }
         
@@ -125,7 +122,6 @@ class SearchViewController: UIViewController {
         viewTable.dataSource = contentTableHandler
         viewTable.delegate = contentTableHandler
         viewTable.separatorStyle = .none
-        viewTable.backgroundColor = .background_E5E5E5
                 
         view.addSubviewForAutoLayout(viewTable)
         view.addSubviewForAutoLayout(mSearchBarTableView)
@@ -192,7 +188,7 @@ extension SearchViewController: UISearchBarDelegate {
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         guard let text = searchBar.text else { return }
-        viewModel.loadSuggestWords(text: text)
+        viewModel.loadSuggestUsers(text: text)
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -201,18 +197,19 @@ extension SearchViewController: UISearchBarDelegate {
             return
         }
         viewModel.addSearchedHistory(text: text)
+        viewModel.loadSuggestUsers(text: text)
         viewModel.loadSearchVods(keyword: text)
         showTimeSelector()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let text = searchBar.text else { return }
-        viewModel.loadSuggestWords(text: text)
+        viewModel.loadSuggestUsers(text: text)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
-        viewModel.loadSuggestWords(text: "")
+        viewModel.loadSuggestUsers(text: "")
     }
 }
 
@@ -227,7 +224,7 @@ extension SearchViewController: TTGTextTagCollectionViewDelegate {
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.suggestWords.value.count
+        return viewModel.suggestUsers.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -235,14 +232,14 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         cell.configure(data: viewModel, index: indexPath.row)
         cell.deleteCallback = { [weak self] index in
             guard let self = self else { return }
-            self.viewModel.suggestWords.value.remove(at: index)
+            self.viewModel.suggestUsers.value.remove(at: index)
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        mSearchBar.text = viewModel.suggestWords.value[indexPath.row]
-        viewModel.loadSearchVods(keyword: viewModel.suggestWords.value[indexPath.row])
+        mSearchBar.text = viewModel.suggestUsers.value[indexPath.row].name
+        viewModel.loadSearchVods(keyword: viewModel.suggestUsers.value[indexPath.row].name)
         showTimeSelector()
         view.endEditing(true)
     }

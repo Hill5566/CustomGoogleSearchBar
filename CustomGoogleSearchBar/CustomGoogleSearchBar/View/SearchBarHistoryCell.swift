@@ -1,7 +1,7 @@
 import UIKit
 
 class SearchBarHistoryCell: UITableViewCell {
-//    static let identifier = "SearchBarHistoryCell"
+
     static let identifier = String(describing: self)
     
     var iconHistory: UIImageView = UIImageView()
@@ -43,12 +43,12 @@ class SearchBarHistoryCell: UITableViewCell {
 
         historyLabel.textColor = .hex6C757D
                 
-        if searchKeyword.count <= data.suggestWords.value[index].count {
-            let mutableString = NSMutableAttributedString(string: data.suggestWords.value[index], attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16)])
+        if searchKeyword.count <= (data.suggestUsers.value[index].name ?? "").count {
+            let mutableString = NSMutableAttributedString(string: data.suggestUsers.value[index].name ?? "", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16)])
             mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.hex1458E2, range: NSRange(location:0,length:searchKeyword.count))
             historyLabel.attributedText = mutableString
         } else {
-            let mutableString = NSMutableAttributedString(string: data.suggestWords.value[index], attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16)])
+            let mutableString = NSMutableAttributedString(string: data.suggestUsers.value[index].name ?? "", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16)])
             mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.hex1458E2, range: NSRange(location:0,length:0))
             historyLabel.attributedText = mutableString
         }

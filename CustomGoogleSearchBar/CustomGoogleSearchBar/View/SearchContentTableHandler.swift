@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 class SearchContentTableHandler: NSObject, UITableViewDataSource, UITableViewDelegate {
-    var searchedContents: [SearchedContent] = []
+    var users: [User] = []
     
     var controller: SearchViewController
     
@@ -17,7 +17,7 @@ class SearchContentTableHandler: NSObject, UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchedContents.count
+        return users.count
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -4,33 +4,40 @@ class SearchViewModel {
     
     init() {
         loadSearchedHistories()
-        loadSearchPopularKeywords() //tags
+        loadSearchPopularKeywords()
     }
     
     let typingKeyword:Box<String> = Box("")
     
-    let suggestWords:Box<[String]> = Box([])
-    func loadSuggestWords(text:String) {
+    let suggestUsers:Box<[User]> = Box([])
+    func loadSuggestUsers(text:String) {
         typingKeyword.value = text
         if text == "" {
-            suggestWords.value = searchedHistories.value
+            suggestUsers.value = searchedHistories.value
         } else {
             loadsearchRecommendKeywords(prefix: text)
         }
     }
     
-    let searchedHistories:Box<[String]> = Box([])
+    let searchedHistories:Box<[User]> = Box([])
     func loadSearchedHistories() {
         searchedHistories.value = UserDefaultManager.default.searchedHistories
     }
-    func addSearchedHistory(text:String) {
+    func addSearchedHistory(text: String) {
         var histories = searchedHistories.value
-        histories = histories.filter { $0 != text }
-        histories.insert(text, at: 0)
+        histories = histories.filter {
+            if let name = $0.name {
+                return name != text
+            } else {
+                return false
+            }
+        }
+        histories.insert(User(name: text), at: 0)
         if histories.count > 5 {
             histories.removeLast()
         }
         searchedHistories.value = histories
+        UserDefaultManager.default.searchedHistories = searchedHistories.value
     }
     
     let popularKeywords:Box<[String]> = Box([])
@@ -42,20 +49,25 @@ class SearchViewModel {
         self.popularKeywords.value = ["John", "Tom", "Joe", "JoJo"]
     }
     
-    let searchRecommendKeywords:Box<[String]> = Box([])
+    let searchRecommendKeywords:Box<[User]> = Box([])
     func loadsearchRecommendKeywords(prefix:String) {
-//        api.getSearchRecommendKeywords(prefix: prefix) { [weak self] keywords in
-//            guard let self = self, let keywords = keywords else { return }
-//            if keywords.count > 5 {
-//                self.searchRecommendKeywords.value = Array(keywords.prefix(upTo: 5))
-//            } else {
-//                self.searchRecommendKeywords.value = keywords
-//            }
-//            self.suggestWords.value = self.searchRecommendKeywords.value.filter { $0.hasPrefix(prefix) }
-//        }
+        Api.getGithubUsers { [weak self] users, error in
+            guard let self = self, let users = users else { return }
+            if users.count > 5 {
+                self.searchRecommendKeywords.value = Array(users.prefix(upTo: 5))
+            } else {
+                self.searchRecommendKeywords.value = users
+            }
+            self.suggestUsers.value = self.searchRecommendKeywords.value.filter {
+                if let name = $0.name {
+                    return name.lowercased().hasPrefix(prefix.lowercased())
+                }
+                return false
+            }
+        }
     }
     
-    let searchedContents: Box<[SearchedContent]> = Box([])
+    let users: Box<[User]> = Box([])
     let dateRange:Box<DateRange> = Box(.anyTime)
     var beginDate:String? = nil
     var endDate:String? = nil

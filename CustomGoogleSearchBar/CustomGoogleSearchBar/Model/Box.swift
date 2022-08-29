@@ -15,8 +15,10 @@ final class Box<T> {
         self.value = value
     }
     
-    func bind(listener: Listener?) {
+    func bind(fireNow: Bool = false, listener: Listener?) {
         self.listener = listener
-        listener?(value)
+        if fireNow {
+            listener?(value)
+        }
     }
 }

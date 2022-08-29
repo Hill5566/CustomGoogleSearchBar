@@ -8,9 +8,7 @@
 import UIKit
 
 class SearchedContentTableViewCell: UITableViewCell {
-    
-    static let identifier = String(describing: self)
-    
+        
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

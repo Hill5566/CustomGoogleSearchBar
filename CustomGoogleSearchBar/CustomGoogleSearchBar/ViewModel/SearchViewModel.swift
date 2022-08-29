@@ -102,7 +102,14 @@ class SearchViewModel {
         }
         
         Api.getGithubUserFollowers(name: name) { [weak self] followers, error in
-            guard let followers = followers, let self = self else { return }
+            guard let self = self else { return }
+            
+            if let _ = error {
+                self.followers.value = []
+                return
+            }
+            
+            guard let followers = followers else { return }
             
             self.followers.value = followers
         }

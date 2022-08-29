@@ -1,8 +1,6 @@
 import UIKit
 
 class SearchBarHistoryCell: UITableViewCell {
-
-    static let identifier = String(describing: self)
     
     var iconHistory: UIImageView = UIImageView()
     var iconSearch: UIImageView = UIImageView()

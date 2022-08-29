@@ -19,8 +19,7 @@ class SearchViewController: UIViewController {
     
     @IBOutlet weak var mDateRangeLabel: UILabel!
     
-    
-    @IBOutlet weak var resultLabel: UILabel!
+    @IBOutlet weak var mNoResultLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,52 +28,35 @@ class SearchViewController: UIViewController {
         setupTagScrollView()
         setupTableView()
         
+        viewModel.searchBarText.bind { [weak self] text in
+            guard let self = self else { return }
+            self.mSearchBar.text = text
+            self.showTimeSelector()
+            self.view.endEditing(true)
+            self.mSearchBarTableView.isHidden = true
+        }
+        
         viewModel.sectionViewModels.bind { [weak self] sectionViewModels in
             guard let self = self else { return }
             self.mSearchBarTableView.isHidden = false
             self.mSearchBarTableView.reloadData()
             self.mSearchBarTableView.layoutIfNeeded()
-            self.mSearchBarTableViewLayoutHeight.constant = self.mSearchBarTableView.contentSize.height
+            self.dynamicSearchBarTableViewHeight()
 //            self.viewTable.reloadData()
-        }
-        
-        viewModel.searchedWordHistories.bind { [weak self] users in
-            guard let self = self else { return }
-            self.view.endEditing(true)
         }
 
         viewModel.popularKeywords.bind(fireNow: true) { [weak self] keywords in
             guard let self = self else { return }
-            self.mTagScrollView.removeAllTags()
-            for text in keywords {
-                let content = TTGTextTagStringContent.init(text: text)
-                content.textColor = .hex6C757D
-                content.textFont = UIFont.systemFont(ofSize: 16)
-                
-                let normalStyle = TTGTextTagStyle.init()
-                normalStyle.backgroundColor = .hexF7F7F7
-                normalStyle.extraSpace = CGSize.init(width: 16, height: 16)
-                normalStyle.borderColor = .hexDEE2E6
-                normalStyle.cornerRadius = 4
-                normalStyle.shadowColor = .clear
-                
-                let tag = TTGTextTag.init()
-                tag.content = content
-                tag.style = normalStyle
-                tag.selectedStyle = normalStyle
-
-                self.mTagScrollView.addTag(tag)
-            }
-            self.mTagScrollView.reload()
+            self.reloadTabScrollView(keywords: keywords)
         }
                 
         viewModel.followers.bind { [weak self] followers in
             guard let self = self else { return }
             if followers.count == 0 {
-                self.resultLabel.isHidden = false
-                self.view.bringSubviewToFront(self.resultLabel)
+                self.mNoResultLabel.isHidden = false
+                self.view.bringSubviewToFront(self.mNoResultLabel)
             } else {
-                self.resultLabel.isHidden = true
+                self.mNoResultLabel.isHidden = true
             }
             self.contentTableHandler.followers = followers
             self.viewTable.reloadData()
@@ -83,7 +65,7 @@ class SearchViewController: UIViewController {
         viewModel.dateRange.bind { [weak self] dateRange in
             guard let self = self else { return }
             self.mDateRangeLabel.text = dateRange.rawValue
-            self.viewModel.loadUserFollowers(name: self.viewModel.typingKeyword.value)
+            
         }
     }
     
@@ -144,8 +126,34 @@ class SearchViewController: UIViewController {
         ])
     }
     
-    func showTimeSelector() {
+    fileprivate func showTimeSelector() {
         viewTableLayoutTop.constant = 61
+    }
+    fileprivate func dynamicSearchBarTableViewHeight() {
+        mSearchBarTableViewLayoutHeight.constant = mSearchBarTableView.contentSize.height
+    }
+    fileprivate func reloadTabScrollView(keywords: [String]) {
+        self.mTagScrollView.removeAllTags()
+        for text in keywords {
+            let content = TTGTextTagStringContent.init(text: text)
+            content.textColor = .hex6C757D
+            content.textFont = UIFont.systemFont(ofSize: 16)
+            
+            let normalStyle = TTGTextTagStyle.init()
+            normalStyle.backgroundColor = .hexF7F7F7
+            normalStyle.extraSpace = CGSize.init(width: 16, height: 16)
+            normalStyle.borderColor = .hexDEE2E6
+            normalStyle.cornerRadius = 4
+            normalStyle.shadowColor = .clear
+            
+            let tag = TTGTextTag.init()
+            tag.content = content
+            tag.style = normalStyle
+            tag.selectedStyle = normalStyle
+            
+            self.mTagScrollView.addTag(tag)
+        }
+        self.mTagScrollView.reload()
     }
     
     @IBAction func timeSelectorClick(_ sender: UIButton) {
@@ -156,12 +164,14 @@ class SearchViewController: UIViewController {
         vc.selectedDateRangeCallback = { [weak self] dateRange in
             guard let self = self else { return }
             self.viewModel.dateRange.value = dateRange
+            self.viewModel.loadUserFollowers(name: self.viewModel.typingKeyword.value)
         }
         vc.customDateRangeCallback = { [weak self] fromDate, toDate in
             guard let self = self else { return }
             self.viewModel.beginDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: fromDate)
             self.viewModel.endDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: toDate)
             self.viewModel.dateRange.value = .customRange
+            self.viewModel.loadUserFollowers(name: self.viewModel.typingKeyword.value)
             self.dismiss(animated: false, completion: nil)
         }
         present(vc, animated: true, completion: nil)
@@ -182,31 +192,19 @@ extension SearchViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text else { return }
-        if text == "" {
-            return
-        }
-        viewModel.addSearchedHistory(text: text)
-        viewModel.loadSuggestUsers(text: text)
+        viewModel.addSearchedWordHistory(text: text)
         viewModel.loadUserFollowers(name: text)
-        showTimeSelector()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let text = searchBar.text else { return }
         viewModel.loadSuggestUsers(text: text)
     }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = ""
-        viewModel.loadSuggestUsers(text: "")
-    }
 }
 
 extension SearchViewController: TTGTextTagCollectionViewDelegate {
     func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
-        mSearchBar.text = viewModel.popularKeywords.value[Int(index)]
-        viewModel.loadUserFollowers(name: viewModel.typingKeyword.value)
-        showTimeSelector()
+        viewModel.loadUserFollowers(name: viewModel.popularKeywords.value[Int(index)])
     }
 }
 
@@ -234,12 +232,13 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        mSearchBar.text = viewModel.suggestUsers.value[indexPath.row].name
-//        viewModel.loadUserFollowers(name: viewModel.suggestUsers.value[indexPath.row].name)
-//        showTimeSelector()
-//        view.endEditing(true)
-//    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let sectionViewModel = viewModel.sectionViewModels.value[indexPath.section]
+        if let rowViewModel = sectionViewModel.rowViewModels[indexPath.row] as? ViewModelPressible {
+            rowViewModel.cellPressed?()
+        }
+    }
+
     
 //    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
 //        let customView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60))

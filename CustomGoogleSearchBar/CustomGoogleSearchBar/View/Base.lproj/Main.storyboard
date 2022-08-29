@@ -112,10 +112,10 @@
                     </view>
                     <connections>
                         <outlet property="mDateRangeLabel" destination="KcY-87-NZd" id="ZzL-xe-Q03"/>
+                        <outlet property="mNoResultLabel" destination="Iwq-Iu-UXz" id="31p-BJ-QWC"/>
                         <outlet property="mSearchBar" destination="6Zu-lx-WcA" id="nv1-8j-yUP"/>
                         <outlet property="mSearchBarBackgroundView" destination="6Do-8J-Ia7" id="7rq-az-nP6"/>
                         <outlet property="mTrendingLabel" destination="DOm-a1-kmL" id="KZ5-Un-Bjm"/>
-                        <outlet property="resultLabel" destination="Iwq-Iu-UXz" id="4oT-9O-qSv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vl5-oZ-U1L" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -21,4 +21,8 @@ final class Box<T> {
             listener?(value)
         }
     }
+    
+    func unbind() {
+        listener = nil
+    }
 }

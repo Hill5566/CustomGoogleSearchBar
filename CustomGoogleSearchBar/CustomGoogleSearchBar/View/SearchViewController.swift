@@ -29,32 +29,21 @@ class SearchViewController: UIViewController {
         setupTagScrollView()
         setupTableView()
         
-        viewModel.typingKeyword.bind { [weak self] text in
-            guard let self = self else { return }
-            self.mSearchBarTableView.isHidden = true
-            self.mSearchBarTableView.reloadData()
-            self.mSearchBarTableView.layoutIfNeeded()
-            self.mSearchBarTableViewLayoutHeight.constant = self.mSearchBarTableView.contentSize.height
-        }
-        
-        viewModel.suggestUsers.bind { [weak self] suggestUsers in
+        viewModel.sectionViewModels.bind { [weak self] sectionViewModels in
             guard let self = self else { return }
             self.mSearchBarTableView.isHidden = false
             self.mSearchBarTableView.reloadData()
             self.mSearchBarTableView.layoutIfNeeded()
             self.mSearchBarTableViewLayoutHeight.constant = self.mSearchBarTableView.contentSize.height
+//            self.viewTable.reloadData()
         }
         
-        viewModel.searchedHistories.bind { [weak self] users in
+        viewModel.searchedWordHistories.bind { [weak self] users in
             guard let self = self else { return }
             self.view.endEditing(true)
-            self.mSearchBarTableView.isHidden = true
-            self.mSearchBarTableView.reloadData()
-            self.mSearchBarTableView.layoutIfNeeded()
-            self.mSearchBarTableViewLayoutHeight.constant = self.mSearchBarTableView.contentSize.height
         }
-        
-        viewModel.popularKeywords.bind { [weak self] keywords in
+
+        viewModel.popularKeywords.bind(fireNow: true) { [weak self] keywords in
             guard let self = self else { return }
             self.mTagScrollView.removeAllTags()
             for text in keywords {
@@ -107,7 +96,7 @@ class SearchViewController: UIViewController {
                 
         mSearchBarTableView.dataSource = self
         mSearchBarTableView.delegate = self
-        mSearchBarTableView.register(SearchBarHistoryCell.self, forCellReuseIdentifier: SearchBarHistoryCell.identifier)
+        mSearchBarTableView.register(SearchBarCell.self, forCellReuseIdentifier: SearchBarCell.identifier)
         mSearchBarTableView.isHidden = true
         mSearchBarTableView.separatorStyle = .none
         mSearchBarTableView.isScrollEnabled = false
@@ -223,52 +212,60 @@ extension SearchViewController: TTGTextTagCollectionViewDelegate {
 
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return viewModel.sectionViewModels.value.count
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.suggestUsers.value.count
+        let sectionViewModel = viewModel.sectionViewModels.value[section]
+        return sectionViewModel.rowViewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchBarHistoryCell.identifier, for: indexPath) as? SearchBarHistoryCell else { return UITableViewCell() }
-        cell.configure(data: viewModel, index: indexPath.row)
-        cell.deleteCallback = { [weak self] index in
-            guard let self = self else { return }
-            self.viewModel.suggestUsers.value.remove(at: index)
+        let sectionViewModel = viewModel.sectionViewModels.value[indexPath.section]
+        let rowViewModel = sectionViewModel.rowViewModels[indexPath.row]
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: viewModel.cellIdentifier(for: rowViewModel), for: indexPath)
+
+        if let cell = cell as? CellConfigurable {
+            cell.configure(viewModel: rowViewModel)
         }
+        
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        mSearchBar.text = viewModel.suggestUsers.value[indexPath.row].name
-        viewModel.loadUserFollowers(name: viewModel.suggestUsers.value[indexPath.row].name)
-        showTimeSelector()
-        view.endEditing(true)
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        mSearchBar.text = viewModel.suggestUsers.value[indexPath.row].name
+//        viewModel.loadUserFollowers(name: viewModel.suggestUsers.value[indexPath.row].name)
+//        showTimeSelector()
+//        view.endEditing(true)
+//    }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let customView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60))
-        let button = UIButton()
-        button.setTitleColor(.hex7F7F7F, for: .normal)
-        button.setTitle("Clear history", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 13)
-        button.addTarget(self, action: #selector(clearHistoryAction(_:)), for: .touchUpInside)
-        button.borderWidth = 1
-        button.cornerRadius = 4
-        button.borderColor = .hexDEE2E6
-        customView.addSubviewForAutoLayout(button)
-        NSLayoutConstraint.activate([
-            button.leadingAnchor.constraint(equalTo: customView.leadingAnchor, constant: 20),
-            button.trailingAnchor.constraint(equalTo: customView.trailingAnchor, constant: -20),
-            button.centerYAnchor.constraint(equalTo: customView.centerYAnchor, constant: 0),
-            button.heightAnchor.constraint(equalToConstant: 33)
-        ])
-        return customView
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return viewModel.typingKeyword.value == "" ? 60 : 0
-    }
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        let customView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60))
+//        let button = UIButton()
+//        button.setTitleColor(.hex7F7F7F, for: .normal)
+//        button.setTitle("Clear history", for: .normal)
+//        button.titleLabel?.font = UIFont.systemFont(ofSize: 13)
+//        button.addTarget(self, action: #selector(clearHistoryAction(_:)), for: .touchUpInside)
+//        button.borderWidth = 1
+//        button.cornerRadius = 4
+//        button.borderColor = .hexDEE2E6
+//        customView.addSubviewForAutoLayout(button)
+//        NSLayoutConstraint.activate([
+//            button.leadingAnchor.constraint(equalTo: customView.leadingAnchor, constant: 20),
+//            button.trailingAnchor.constraint(equalTo: customView.trailingAnchor, constant: -20),
+//            button.centerYAnchor.constraint(equalTo: customView.centerYAnchor, constant: 0),
+//            button.heightAnchor.constraint(equalToConstant: 33)
+//        ])
+//        return customView
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return viewModel.typingKeyword.value == "" ? 60 : 0
+//    }
     
      @objc func clearHistoryAction(_ sender: UIButton) {
-         viewModel.searchedHistories.value = []
+         viewModel.searchedWordHistories.value = []
      }
 }

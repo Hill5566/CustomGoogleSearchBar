@@ -1,6 +1,6 @@
 import UIKit
 
-class SearchBarHistoryCell: UITableViewCell {
+class SearchBarCell: UITableViewCell, CellConfigurable {
     
     var iconHistory: UIImageView = UIImageView()
     var iconSearch: UIImageView = UIImageView()
@@ -29,24 +29,26 @@ class SearchBarHistoryCell: UITableViewCell {
         
     }
     
-    func configure(data: SearchViewModel, index:Int) {
-        
-        let searchKeyword = data.typingKeyword.value
+    func configure(viewModel: RowViewModel) {
+        guard let viewModel = viewModel as? User else { return }
 
-        iconHistory.isHidden = searchKeyword == "" ? false : true
-        iconSearch.isHidden = searchKeyword == "" ? true : false
+        guard let typingKeyword = viewModel.typingKeyword else { return }
+        guard let name = viewModel.name else { return }
+
+        iconHistory.isHidden = typingKeyword == "" ? false : true
+        iconSearch.isHidden = typingKeyword == "" ? true : false
         
         iconHistory.image = UIImage(named: "history_clock")
         iconSearch.image = UIImage(named: "search")
 
         historyLabel.textColor = .hex6C757D
                 
-        if searchKeyword.count <= (data.suggestUsers.value[index].name ?? "").count {
-            let mutableString = NSMutableAttributedString(string: data.suggestUsers.value[index].name ?? "", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16)])
-            mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.hex1458E2, range: NSRange(location:0,length:searchKeyword.count))
+        if typingKeyword.count <= name.count {
+            let mutableString = NSMutableAttributedString(string: name, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16)])
+            mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.hex1458E2, range: NSRange(location:0,length:typingKeyword.count))
             historyLabel.attributedText = mutableString
         } else {
-            let mutableString = NSMutableAttributedString(string: data.suggestUsers.value[index].name ?? "", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16)])
+            let mutableString = NSMutableAttributedString(string: name, attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16)])
             mutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.hex1458E2, range: NSRange(location:0,length:0))
             historyLabel.attributedText = mutableString
         }
@@ -54,8 +56,8 @@ class SearchBarHistoryCell: UITableViewCell {
         historyLabel.numberOfLines = 0
         historyLabel.font = UIFont.systemFont(ofSize: 16)
         
-        closeButton.isHidden = searchKeyword == "" ? false : true
-        closeButton.tag = index
+        closeButton.isHidden = typingKeyword == "" ? false : true
+//        closeButton.tag = index
         closeButton.setImage(UIImage(named: "close_gray"), for: .normal)
         closeButton.addTarget(self, action: #selector(closeButtonClick), for: .touchUpInside)
 

@@ -1,6 +1,10 @@
 import Foundation
 
-struct User: Codable {
+struct User: Search, Codable, RowViewModel, ViewModelPressible {
+    
+    var typingKeyword: String?
+    var cellPressed: (() -> Void)?
+
     var id: Int?
     var name: String?
     var avatar_url: String?

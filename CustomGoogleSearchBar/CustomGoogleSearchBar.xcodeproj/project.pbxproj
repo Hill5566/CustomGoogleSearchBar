@@ -25,9 +25,9 @@
 		E93C710628B8960200FC2078 /* DateRangeSelectorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FD28B8960200FC2078 /* DateRangeSelectorVC.swift */; };
 		E93C710728B8960200FC2078 /* DateRangeSelectorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FD28B8960200FC2078 /* DateRangeSelectorVC.swift */; };
 		E93C710828B8960200FC2078 /* DateRangeSelectorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FD28B8960200FC2078 /* DateRangeSelectorVC.swift */; };
-		E93C710928B8960200FC2078 /* SearchBarHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FE28B8960200FC2078 /* SearchBarHistoryCell.swift */; };
-		E93C710A28B8960200FC2078 /* SearchBarHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FE28B8960200FC2078 /* SearchBarHistoryCell.swift */; };
-		E93C710B28B8960200FC2078 /* SearchBarHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FE28B8960200FC2078 /* SearchBarHistoryCell.swift */; };
+		E93C710928B8960200FC2078 /* SearchBarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FE28B8960200FC2078 /* SearchBarCell.swift */; };
+		E93C710A28B8960200FC2078 /* SearchBarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FE28B8960200FC2078 /* SearchBarCell.swift */; };
+		E93C710B28B8960200FC2078 /* SearchBarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FE28B8960200FC2078 /* SearchBarCell.swift */; };
 		E93C710C28B8960200FC2078 /* SearchContentTableHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FF28B8960200FC2078 /* SearchContentTableHandler.swift */; };
 		E93C710D28B8960200FC2078 /* SearchContentTableHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FF28B8960200FC2078 /* SearchContentTableHandler.swift */; };
 		E93C710E28B8960200FC2078 /* SearchContentTableHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C70FF28B8960200FC2078 /* SearchContentTableHandler.swift */; };
@@ -59,6 +59,11 @@
 		E96FA71B28B89E7A0031045D /* SearchedContentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E96FA71928B89E7A0031045D /* SearchedContentTableViewCell.xib */; };
 		E96FA71E28B8BE9B0031045D /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96FA71D28B8BE9B0031045D /* Api.swift */; };
 		E99C03B728BC93550094A165 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C03B628BC93550094A165 /* Extensions.swift */; };
+		E99C03BA28BC9EF80094A165 /* SearchBarCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C03B928BC9EF80094A165 /* SearchBarCellViewModel.swift */; };
+		E99C03BC28BC9F9C0094A165 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C03BB28BC9F9C0094A165 /* Protocols.swift */; };
+		E99C03BE28BCA2850094A165 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C03BD28BCA2850094A165 /* AsyncImage.swift */; };
+		E99C03C028BCA5F20094A165 /* ImageDownloadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C03BF28BCA5F20094A165 /* ImageDownloadHelper.swift */; };
+		E99C03C428BCA6CA0094A165 /* SectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C03C328BCA6CA0094A165 /* SectionViewModel.swift */; };
 		E9E1296B28B89B5200D615D7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E1296A28B89B5200D615D7 /* User.swift */; };
 		F2336AF44E1FA3C3C9936E58 /* Pods_CustomGoogleSearchBarTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A38F3A7E3870462A72942430 /* Pods_CustomGoogleSearchBarTests.framework */; };
 /* End PBXBuildFile section */
@@ -105,7 +110,7 @@
 		E93C70ED28B8959700FC2078 /* CustomGoogleSearchBarUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomGoogleSearchBarUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E93C70FC28B8960200FC2078 /* DateRangeSelectorVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DateRangeSelectorVC.xib; sourceTree = "<group>"; };
 		E93C70FD28B8960200FC2078 /* DateRangeSelectorVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateRangeSelectorVC.swift; sourceTree = "<group>"; };
-		E93C70FE28B8960200FC2078 /* SearchBarHistoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBarHistoryCell.swift; sourceTree = "<group>"; };
+		E93C70FE28B8960200FC2078 /* SearchBarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBarCell.swift; sourceTree = "<group>"; };
 		E93C70FF28B8960200FC2078 /* SearchContentTableHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchContentTableHandler.swift; sourceTree = "<group>"; };
 		E93C710028B8960200FC2078 /* CustomRangeVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomRangeVC.xib; sourceTree = "<group>"; };
 		E93C710128B8960200FC2078 /* CustomRangeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRangeVC.swift; sourceTree = "<group>"; };
@@ -119,6 +124,11 @@
 		E96FA71928B89E7A0031045D /* SearchedContentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchedContentTableViewCell.xib; sourceTree = "<group>"; };
 		E96FA71D28B8BE9B0031045D /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		E99C03B628BC93550094A165 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E99C03B928BC9EF80094A165 /* SearchBarCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarCellViewModel.swift; sourceTree = "<group>"; };
+		E99C03BB28BC9F9C0094A165 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		E99C03BD28BCA2850094A165 /* AsyncImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		E99C03BF28BCA5F20094A165 /* ImageDownloadHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadHelper.swift; sourceTree = "<group>"; };
+		E99C03C328BCA6CA0094A165 /* SectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionViewModel.swift; sourceTree = "<group>"; };
 		E9E1296A28B89B5200D615D7 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F0FD25EF25F9A716BF4BB5C8 /* Pods-CustomGoogleSearchBarTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CustomGoogleSearchBarTests.release.xcconfig"; path = "Target Support Files/Pods-CustomGoogleSearchBarTests/Pods-CustomGoogleSearchBarTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -194,6 +204,9 @@
 				E93C70FA28B895D800FC2078 /* ViewModel */,
 				E96FA71C28B8BE3F0031045D /* Network */,
 				E99C03B628BC93550094A165 /* Extensions.swift */,
+				E99C03BB28BC9F9C0094A165 /* Protocols.swift */,
+				E99C03BD28BCA2850094A165 /* AsyncImage.swift */,
+				E99C03BF28BCA5F20094A165 /* ImageDownloadHelper.swift */,
 				E93C70D328B8959700FC2078 /* Assets.xcassets */,
 				E93C70D528B8959700FC2078 /* LaunchScreen.storyboard */,
 				E93C70D828B8959700FC2078 /* Info.plist */,
@@ -222,8 +235,6 @@
 		E93C70FA28B895D800FC2078 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				E93C711A28B8966C00FC2078 /* SearchViewModel.swift */,
-				E93C711C28B8966C00FC2078 /* DateRangeSelectorViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -244,14 +255,14 @@
 			children = (
 				E93C70CD28B8959500FC2078 /* Main.storyboard */,
 				E93C710228B8960200FC2078 /* SearchViewController.swift */,
+				E93C711A28B8966C00FC2078 /* SearchViewModel.swift */,
 				E93C70FF28B8960200FC2078 /* SearchContentTableHandler.swift */,
-				E93C70FE28B8960200FC2078 /* SearchBarHistoryCell.swift */,
-				E96FA71828B89E7A0031045D /* SearchedContentTableViewCell.swift */,
-				E96FA71928B89E7A0031045D /* SearchedContentTableViewCell.xib */,
 				E93C70FD28B8960200FC2078 /* DateRangeSelectorVC.swift */,
 				E93C70FC28B8960200FC2078 /* DateRangeSelectorVC.xib */,
+				E93C711C28B8966C00FC2078 /* DateRangeSelectorViewModel.swift */,
 				E93C710128B8960200FC2078 /* CustomRangeVC.swift */,
 				E93C710028B8960200FC2078 /* CustomRangeVC.xib */,
+				E99C03B828BC9ED70094A165 /* Cells */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -262,6 +273,18 @@
 				E96FA71D28B8BE9B0031045D /* Api.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		E99C03B828BC9ED70094A165 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				E99C03C328BCA6CA0094A165 /* SectionViewModel.swift */,
+				E93C70FE28B8960200FC2078 /* SearchBarCell.swift */,
+				E99C03B928BC9EF80094A165 /* SearchBarCellViewModel.swift */,
+				E96FA71828B89E7A0031045D /* SearchedContentTableViewCell.swift */,
+				E96FA71928B89E7A0031045D /* SearchedContentTableViewCell.xib */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		F3DDE790A52342478DD59AA2 /* Pods */ = {
@@ -524,23 +547,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				E93C712228B8966C00FC2078 /* SearchViewModel.swift in Sources */,
+				E99C03C028BCA5F20094A165 /* ImageDownloadHelper.swift in Sources */,
 				E93C70CC28B8959500FC2078 /* ViewController.swift in Sources */,
 				E9E1296B28B89B5200D615D7 /* User.swift in Sources */,
 				E96FA71A28B89E7A0031045D /* SearchedContentTableViewCell.swift in Sources */,
 				E96FA71E28B8BE9B0031045D /* Api.swift in Sources */,
 				E93C70D228B8959500FC2078 /* CustomGoogleSearchBar.xcdatamodeld in Sources */,
 				E93C710628B8960200FC2078 /* DateRangeSelectorVC.swift in Sources */,
+				E99C03BE28BCA2850094A165 /* AsyncImage.swift in Sources */,
 				E93C711528B8960200FC2078 /* SearchViewController.swift in Sources */,
 				E93C712E28B8966C00FC2078 /* DateFormatters.swift in Sources */,
 				E93C712B28B8966C00FC2078 /* UserDefaultManager.swift in Sources */,
 				E93C70C828B8959500FC2078 /* AppDelegate.swift in Sources */,
 				E99C03B728BC93550094A165 /* Extensions.swift in Sources */,
+				E99C03BA28BC9EF80094A165 /* SearchBarCellViewModel.swift in Sources */,
 				E93C710C28B8960200FC2078 /* SearchContentTableHandler.swift in Sources */,
-				E93C710928B8960200FC2078 /* SearchBarHistoryCell.swift in Sources */,
+				E93C710928B8960200FC2078 /* SearchBarCell.swift in Sources */,
+				E99C03BC28BC9F9C0094A165 /* Protocols.swift in Sources */,
 				E93C70CA28B8959500FC2078 /* SceneDelegate.swift in Sources */,
 				E93C711228B8960200FC2078 /* CustomRangeVC.swift in Sources */,
 				E93C711F28B8966C00FC2078 /* Box.swift in Sources */,
 				E93C712828B8966C00FC2078 /* DateRangeSelectorViewModel.swift in Sources */,
+				E99C03C428BCA6CA0094A165 /* SectionViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -557,7 +585,7 @@
 				E93C70E228B8959700FC2078 /* CustomGoogleSearchBarTests.swift in Sources */,
 				E93C712C28B8966C00FC2078 /* UserDefaultManager.swift in Sources */,
 				E93C710D28B8960200FC2078 /* SearchContentTableHandler.swift in Sources */,
-				E93C710A28B8960200FC2078 /* SearchBarHistoryCell.swift in Sources */,
+				E93C710A28B8960200FC2078 /* SearchBarCell.swift in Sources */,
 				E93C710728B8960200FC2078 /* DateRangeSelectorVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -571,7 +599,7 @@
 				E93C713028B8966C00FC2078 /* DateFormatters.swift in Sources */,
 				E93C711728B8960200FC2078 /* SearchViewController.swift in Sources */,
 				E93C710828B8960200FC2078 /* DateRangeSelectorVC.swift in Sources */,
-				E93C710B28B8960200FC2078 /* SearchBarHistoryCell.swift in Sources */,
+				E93C710B28B8960200FC2078 /* SearchBarCell.swift in Sources */,
 				E93C712D28B8966C00FC2078 /* UserDefaultManager.swift in Sources */,
 				E93C710E28B8960200FC2078 /* SearchContentTableHandler.swift in Sources */,
 				E93C712128B8966C00FC2078 /* Box.swift in Sources */,

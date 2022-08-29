@@ -7,24 +7,43 @@ class SearchViewModel {
         loadSearchPopularKeywords()
     }
     
+    let sectionViewModels = Box<[SectionViewModel]>([])
+    func cellIdentifier(for viewModel: RowViewModel) -> String {
+        switch viewModel {
+        case is User:
+            return SearchBarCell.identifier
+        default:
+            fatalError("Unexpected view model type: \(viewModel)")
+        }
+    }
+
     let typingKeyword:Box<String> = Box("")
-    
-    let suggestUsers:Box<[User]> = Box([])
     func loadSuggestUsers(text:String) {
         typingKeyword.value = text
         if text == "" {
-            suggestUsers.value = searchedHistories.value
+            sectionViewModels.value = buildViewModels(searchs: searchedWordHistories.value)
         } else {
-            loadSearchRecommendKeywords(prefix: text)
+            loadRecommendUsers(prefix: text)
         }
     }
     
-    let searchedHistories:Box<[User]> = Box([])
+    func buildViewModels(searchs: [Search]) -> [SectionViewModel] {
+        var vm: [RowViewModel] = []
+        for search in searchs {
+            if var user = search as? User {
+                user.typingKeyword = typingKeyword.value
+                vm.append(user)
+            }
+        }
+        return [SectionViewModel(rowViewModels: vm)]
+    }
+    
+    let searchedWordHistories:Box<[User]> = Box([])
     func loadSearchedHistories() {
-        searchedHistories.value = UserDefaultManager.default.searchedHistories
+        searchedWordHistories.value = UserDefaultManager.default.searchedHistories
     }
     func addSearchedHistory(text: String) {
-        var histories = searchedHistories.value
+        var histories = searchedWordHistories.value
         histories = histories.filter {
             if let name = $0.name {
                 return name != text
@@ -36,8 +55,8 @@ class SearchViewModel {
         if histories.count > 5 {
             histories.removeLast()
         }
-        searchedHistories.value = histories
-        UserDefaultManager.default.searchedHistories = searchedHistories.value
+        searchedWordHistories.value = histories
+        UserDefaultManager.default.searchedHistories = searchedWordHistories.value
     }
     
     let popularKeywords:Box<[String]> = Box([])
@@ -49,19 +68,16 @@ class SearchViewModel {
         self.popularKeywords.value = ["John", "Tom", "Joe", "JoJo"]
     }
     
-    let searchRecommendKeywords:Box<[User]> = Box([])
-    func loadSearchRecommendKeywords(prefix:String) {
+    func loadRecommendUsers(prefix:String) {
         Api.getGithubUsers { [weak self] users, error in
             guard let self = self, let users = users else { return }
-            
-            self.searchRecommendKeywords.value = users
-            
-            self.suggestUsers.value = self.searchRecommendKeywords.value.filter {
+                        
+            self.sectionViewModels.value = self.buildViewModels(searchs: users.filter {
                 if let name = $0.name {
                     return name.lowercased().hasPrefix(prefix.lowercased())
                 }
                 return false
-            }
+            })
         }
     }
     

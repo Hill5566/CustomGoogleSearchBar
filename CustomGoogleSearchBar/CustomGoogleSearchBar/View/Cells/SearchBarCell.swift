@@ -1,12 +1,11 @@
 import UIKit
 
 class SearchBarCell: UITableViewCell, CellConfigurable {
-    
+
     var iconHistory: UIImageView = UIImageView()
     var iconSearch: UIImageView = UIImageView()
-    var closeButton = UIButton()
+    var deleteButton = UIButton()
     var historyLabel = UILabel()
-    var deleteCallback:((Int)->())?
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -29,11 +28,15 @@ class SearchBarCell: UITableViewCell, CellConfigurable {
         
     }
     
+    var viewModel: SearchBarCellViewModel?
+    
     func configure(viewModel: RowViewModel) {
-        guard let viewModel = viewModel as? User else { return }
+        guard let viewModel = viewModel as? SearchBarCellViewModel else { return }
 
-        guard let typingKeyword = viewModel.typingKeyword else { return }
-        guard let name = viewModel.name else { return }
+        self.viewModel = viewModel
+
+        let typingKeyword = viewModel.typingKeyword
+        let name = viewModel.name
 
         iconHistory.isHidden = typingKeyword == "" ? false : true
         iconSearch.isHidden = typingKeyword == "" ? true : false
@@ -56,15 +59,15 @@ class SearchBarCell: UITableViewCell, CellConfigurable {
         historyLabel.numberOfLines = 0
         historyLabel.font = UIFont.systemFont(ofSize: 16)
         
-        closeButton.isHidden = typingKeyword == "" ? false : true
-//        closeButton.tag = index
-        closeButton.setImage(UIImage(named: "close_gray"), for: .normal)
-        closeButton.addTarget(self, action: #selector(closeButtonClick), for: .touchUpInside)
+        deleteButton.isHidden = typingKeyword == "" ? false : true
+//        deleteButton.tag = index
+        deleteButton.setImage(UIImage(named: "close_gray"), for: .normal)
+        deleteButton.addTarget(self, action: #selector(deleteButtonClick), for: .touchUpInside)
 
-        addSubviewForAutoLayout(iconHistory)
-        addSubviewForAutoLayout(iconSearch)
-        addSubviewForAutoLayout(historyLabel)
-        addSubviewForAutoLayout(closeButton)
+        contentView.addSubviewForAutoLayout(iconHistory)
+        contentView.addSubviewForAutoLayout(iconSearch)
+        contentView.addSubviewForAutoLayout(historyLabel)
+        contentView.addSubviewForAutoLayout(deleteButton)
         
         NSLayoutConstraint.activate([
             iconHistory.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
@@ -78,18 +81,18 @@ class SearchBarCell: UITableViewCell, CellConfigurable {
             iconSearch.heightAnchor.constraint(equalToConstant: 16),
 
             historyLabel.leadingAnchor.constraint(equalTo: iconSearch.trailingAnchor, constant: 12),
-            historyLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -12),
+            historyLabel.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -12),
             historyLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
             historyLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8),
             
-            closeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
-            closeButton.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
-            closeButton.widthAnchor.constraint(equalToConstant: 12),
-            closeButton.heightAnchor.constraint(equalToConstant: 12)
+            deleteButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
+            deleteButton.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0),
+            deleteButton.widthAnchor.constraint(equalToConstant: 12),
+            deleteButton.heightAnchor.constraint(equalToConstant: 12)
         ])
     }
     
-    @objc func closeButtonClick(sender: UIButton) {
-        deleteCallback?(sender.tag)
+    @objc func deleteButtonClick(sender: UIButton) {
+        viewModel?.deleteButtonPressed?()
     }
 }

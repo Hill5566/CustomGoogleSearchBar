@@ -21,14 +21,22 @@ class SearchViewModel {
     }
     func buildViewModels(searchs: [Search]) -> [SectionViewModel] {
         var vm: [RowViewModel] = []
-        for search in searchs {
-            if var user = search as? User {
-                user.typingKeyword = typingKeyword.value
-                user.cellPressed = {
-                    self.searchBarText.value = user.name ?? ""
+        for (index, search) in searchs.enumerated() {
+            if let user = search as? User, let name = user.name {
+                let searchBarCellViewModel = SearchBarCellViewModel(typingKeyword: typingKeyword.value, user: user)
+                searchBarCellViewModel.cellPressed = { [weak self] in
+                    guard let self = self else { return }
+                    self.searchBarText.value = name
                     self.loadUserFollowers(name: self.searchBarText.value)
                 }
-                vm.append(user)
+                searchBarCellViewModel.deleteButtonPressed = { [weak self] in
+                    guard let self = self else { return }
+                    self.searchedWordHistories.value.remove(at: index)
+                    UserDefaultManager.default.searchedWordHistories = self.searchedWordHistories.value
+                    print(self.searchedWordHistories.value)
+                    self.loadSuggestUsers(text: "")
+                }
+                vm.append(searchBarCellViewModel)
             }
         }
         return [SectionViewModel(rowViewModels: vm)]
@@ -133,7 +141,7 @@ class SearchViewModel {
     
     func cellIdentifier(for viewModel: RowViewModel) -> String {
         switch viewModel {
-        case is User:
+        case is SearchBarCellViewModel:
             return SearchBarCell.identifier
         default:
             fatalError("Unexpected view model type: \(viewModel)")

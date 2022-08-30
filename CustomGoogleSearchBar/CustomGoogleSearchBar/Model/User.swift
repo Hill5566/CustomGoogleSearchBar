@@ -1,9 +1,6 @@
 import Foundation
 
-struct User: Search, Codable, RowViewModel, ViewModelPressible {
-    
-    var typingKeyword: String?
-    var cellPressed: (() -> Void)?
+struct User: Search, Codable {
 
     var id: Int?
     var name: String?

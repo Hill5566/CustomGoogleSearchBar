@@ -136,7 +136,6 @@ class SearchViewModel {
             
             self.followers.value = followers
         }
-//                let publishTime:Date? = ISO8601DateFormatter().date(from:result.publishTime) ?? nil
     }
     
     func cellIdentifier(for viewModel: RowViewModel) -> String {

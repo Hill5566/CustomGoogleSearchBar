@@ -6,12 +6,13 @@ class SearchResultTableViewDataSource: NSObject, UITableViewDataSource {
     var followers: [User] {
         didSet {
             var viewModels: [SearchResultCellViewModel] = []
-            for user in followers {
-                viewModels.append(SearchResultCellViewModel(user: user))
+            for (index, user) in followers.enumerated() {
+                viewModels.append(SearchResultCellViewModel(user: user, monkCreatedDate: Calendar.current.date(byAdding: .day, value: -index, to: Date()) ??  Date()))
             }
             searchResults = viewModels
         }
     }
+    
     private var searchResults: [SearchResultCellViewModel] = []
     
     init(_ followers:[User]) {
@@ -27,7 +28,7 @@ class SearchResultTableViewDataSource: NSObject, UITableViewDataSource {
 
         cell.imageView?.sd_setImage(with: URL(string: searchResult.avatar_url), placeholderImage: UIImage(named: "avatar"))
         cell.textLabel?.text = searchResult.name
-        cell.detailTextLabel?.text = "1"//searchResult.created_at
+        cell.detailTextLabel?.text = searchResult.created_at
         return cell
     }
     

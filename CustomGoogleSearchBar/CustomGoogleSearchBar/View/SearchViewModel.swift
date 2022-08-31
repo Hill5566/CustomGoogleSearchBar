@@ -89,8 +89,8 @@ class SearchViewModel {
     
     let followers: Box<[User]> = Box([])
     let dateRange:Box<DateRange> = Box(.anyTime)
-    var beginDate:String? = nil
-    var endDate:String? = nil
+    var beginDate:Date? = nil
+    var endDate:Date? = nil
     func loadUserFollowers(name: String?) {
         
         guard let name = name else { return }
@@ -106,17 +106,17 @@ class SearchViewModel {
             beginDate = nil
             endDate = nil
         case .past24hours:
-            beginDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date())
-            endDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: Date())
+            beginDate = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+            endDate = Date()
         case .pastWeek:
-            beginDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date())
-            endDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: Date())
+            beginDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())
+            endDate = Date()
         case .pastMonth:
-            beginDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? Date())
-            endDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: Date())
+            beginDate = Calendar.current.date(byAdding: .month, value: -1, to: Date())
+            endDate = Date()
         case .pastYear:
-            beginDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? Date())
-            endDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: Date())
+            beginDate = Calendar.current.date(byAdding: .year, value: -1, to: Date())
+            endDate = Date()
         case .customRange:
             break
         case .none:
@@ -134,7 +134,12 @@ class SearchViewModel {
             
             guard let followers = followers else { return }
             
-            self.followers.value = followers
+            if let beginDate = self.beginDate, let endDate = self.endDate {
+                let range = beginDate...endDate
+                self.followers.value = followers.filter { range.contains($0.created_at ?? Date()) }
+            } else {
+                self.followers.value = followers
+            }
         }
     }
     

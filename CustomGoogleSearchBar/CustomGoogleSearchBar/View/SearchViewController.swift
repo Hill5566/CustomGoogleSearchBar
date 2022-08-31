@@ -63,7 +63,14 @@ class SearchViewController: UIViewController {
         
         viewModel.dateRange.bind { [weak self] dateRange in
             guard let self = self else { return }
-            self.mDateRangeLabel.text = dateRange.rawValue
+            switch dateRange {
+            case .customRange:
+                guard let beginDate = self.viewModel.beginDate, let endDate = self.viewModel.endDate else { return }
+                self.mDateRangeLabel.text = DateFormatters.format_yyyyMMdd.string(from: beginDate) + " - " + DateFormatters.format_yyyyMMdd.string(from: endDate)
+            default:
+                self.mDateRangeLabel.text = dateRange.rawValue
+            }
+            self.viewModel.loadUserFollowers(name: self.viewModel.searchBarText.value)
         }
     }
     
@@ -92,14 +99,14 @@ class SearchViewController: UIViewController {
         view.addSubviewForAutoLayout(mSearchResultTableView)
         view.addSubviewForAutoLayout(mSearchBarTableView)
         
-        mSearchResultTableViewLayoutTop = mSearchResultTableView.topAnchor.constraint(equalTo: mSearchBarBackgroundView.bottomAnchor, constant: 20)
+        mSearchResultTableViewLayoutTop = mSearchResultTableView.topAnchor.constraint(equalTo: mSearchBarBackgroundView.bottomAnchor, constant: 8)
         NSLayoutConstraint.activate([
             mSearchBarTableView.topAnchor.constraint(equalTo: mSearchBar.bottomAnchor, constant: -1),
             mSearchBarTableView.leadingAnchor.constraint(equalTo: mSearchBar.leadingAnchor, constant: 0),
             mSearchBarTableView.trailingAnchor.constraint(equalTo: mSearchBar.trailingAnchor, constant: 0),
             mSearchResultTableViewLayoutTop,
             mSearchResultTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
-            mSearchResultTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            mSearchResultTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             mSearchResultTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20)
         ])
         mSearchBarTableViewLayoutHeight = mSearchBarTableView.heightAnchor.constraint(equalToConstant: 60)
@@ -122,7 +129,7 @@ class SearchViewController: UIViewController {
     }
     
     fileprivate func showTimeSelector() {
-        mSearchResultTableViewLayoutTop.constant = 61
+        mSearchResultTableViewLayoutTop.constant = 42
     }
     fileprivate func dynamicSearchBarTableViewHeight() {
         mSearchBarTableViewLayoutHeight.constant = mSearchBarTableView.contentSize.height
@@ -163,8 +170,8 @@ class SearchViewController: UIViewController {
         }
         vc.customDateRangeCallback = { [weak self] fromDate, toDate in
             guard let self = self else { return }
-            self.viewModel.beginDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: fromDate)
-            self.viewModel.endDate = DateFormatters.dateFormatter_yyyyMMddTHHmmssSSSz.string(from: toDate)
+            self.viewModel.beginDate = fromDate
+            self.viewModel.endDate = toDate
             self.viewModel.dateRange.value = .customRange
             self.viewModel.loadUserFollowers(name: self.viewModel.typingKeyword.value)
             self.dismiss(animated: false, completion: nil)

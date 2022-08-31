@@ -6,8 +6,8 @@ class SearchResultTableViewDataSource: NSObject, UITableViewDataSource {
     var followers: [User] {
         didSet {
             var viewModels: [SearchResultCellViewModel] = []
-            for (index, user) in followers.enumerated() {
-                viewModels.append(SearchResultCellViewModel(user: user, monkCreatedDate: Calendar.current.date(byAdding: .day, value: -index, to: Date()) ??  Date()))
+            for user in followers {
+                viewModels.append(SearchResultCellViewModel(user: user))
             }
             searchResults = viewModels
         }

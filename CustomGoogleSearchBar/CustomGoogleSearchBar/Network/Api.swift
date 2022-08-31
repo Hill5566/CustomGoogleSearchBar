@@ -102,7 +102,14 @@ class Api {
                     let decoder = JSONDecoder()
 //                    print(try JSONSerialization.jsonObject(with: data, options: []))
                     let users: [User] = try decoder.decode([User].self, from: data)
-                    completion(users, nil)
+                   
+                    var mockUsers: [User] = []
+                    for (index, user) in users.enumerated() {
+                        let mockDate = Calendar.current.date(byAdding: .day, value: -index, to: Date()) ?? Date()
+                        mockUsers.append(User(id: user.id, name: user.name, avatar_url: user.avatar_url, created_at: mockDate))
+                    }
+                    
+                    completion(mockUsers, nil)
                 } catch {
                     print("Unable to decode \(#function) response: \(error.localizedDescription)")
                     completion(nil, .invalidData)

@@ -54,7 +54,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fhk-eY-Uhf">
-                                <rect key="frame" x="20" y="184" width="92" height="21"/>
+                                <rect key="frame" x="20" y="172" width="92" height="21"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Any Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KcY-87-NZd">
                                         <rect key="frame" x="0.0" y="0.0" width="71" height="21"/>
@@ -70,7 +70,7 @@
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ik-Oj-0ed">
-                                        <rect key="frame" x="0.0" y="-10" width="92" height="31"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="92" height="21"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="  "/>
                                         <connections>
@@ -80,12 +80,13 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="4ik-Oj-0ed" secondAttribute="bottom" id="8hw-oC-dP3"/>
+                                    <constraint firstItem="4ik-Oj-0ed" firstAttribute="bottom" secondItem="KcY-87-NZd" secondAttribute="bottom" id="4Ly-9C-avC"/>
+                                    <constraint firstItem="pGW-zd-pQm" firstAttribute="trailing" secondItem="4ik-Oj-0ed" secondAttribute="trailing" id="8KW-1y-H9a"/>
                                     <constraint firstAttribute="bottom" secondItem="KcY-87-NZd" secondAttribute="bottom" id="Gto-wH-axI"/>
                                     <constraint firstAttribute="width" constant="92" id="REm-gH-NUR"/>
-                                    <constraint firstItem="4ik-Oj-0ed" firstAttribute="leading" secondItem="fhk-eY-Uhf" secondAttribute="leading" id="ZZU-H6-irb"/>
+                                    <constraint firstItem="4ik-Oj-0ed" firstAttribute="leading" secondItem="KcY-87-NZd" secondAttribute="leading" id="Wau-df-bUY"/>
+                                    <constraint firstItem="4ik-Oj-0ed" firstAttribute="top" secondItem="KcY-87-NZd" secondAttribute="top" id="gUe-Ot-GIv"/>
                                     <constraint firstItem="KcY-87-NZd" firstAttribute="top" secondItem="fhk-eY-Uhf" secondAttribute="top" id="glD-7H-SNV"/>
-                                    <constraint firstAttribute="trailing" secondItem="4ik-Oj-0ed" secondAttribute="trailing" id="ip9-Z8-tDJ"/>
                                     <constraint firstItem="KcY-87-NZd" firstAttribute="leading" secondItem="fhk-eY-Uhf" secondAttribute="leading" id="jGj-6Y-oIV"/>
                                     <constraint firstItem="pGW-zd-pQm" firstAttribute="centerY" secondItem="KcY-87-NZd" secondAttribute="centerY" id="nFE-BF-yH1"/>
                                     <constraint firstItem="pGW-zd-pQm" firstAttribute="leading" secondItem="KcY-87-NZd" secondAttribute="trailing" constant="8" symbolic="YES" id="oNb-Jm-8qi"/>
@@ -107,7 +108,7 @@
                             <constraint firstItem="6Do-8J-Ia7" firstAttribute="top" secondItem="noZ-E7-BAE" secondAttribute="top" id="hSv-aI-nVw"/>
                             <constraint firstItem="DOm-a1-kmL" firstAttribute="leading" secondItem="noZ-E7-BAE" secondAttribute="leading" constant="24" id="l0P-wZ-DRi"/>
                             <constraint firstItem="fhk-eY-Uhf" firstAttribute="leading" secondItem="noZ-E7-BAE" secondAttribute="leading" constant="20" id="qQ6-Ou-WiF"/>
-                            <constraint firstItem="fhk-eY-Uhf" firstAttribute="top" secondItem="6Do-8J-Ia7" secondAttribute="bottom" constant="20" id="xNO-24-6hu"/>
+                            <constraint firstItem="fhk-eY-Uhf" firstAttribute="top" secondItem="6Do-8J-Ia7" secondAttribute="bottom" constant="8" id="xNO-24-6hu"/>
                         </constraints>
                     </view>
                     <connections>

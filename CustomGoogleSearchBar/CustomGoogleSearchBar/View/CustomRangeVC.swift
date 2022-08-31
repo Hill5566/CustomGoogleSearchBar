@@ -35,6 +35,9 @@ class CustomRangeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) {
+            fromDate = yesterday
+        }
         fromDatePicker.maximumDate = Calendar.current.date(byAdding: .day, value: -1, to: Date())
         toDatePicker.maximumDate = Date()
     }

@@ -16,12 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results Found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iwq-Iu-UXz">
-                                <rect key="frame" x="140" y="443" width="134" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Do-8J-Ia7">
                                 <rect key="frame" x="0.0" y="44" width="414" height="120"/>
                                 <color key="backgroundColor" red="0.8980392157" green="0.8980392157" blue="0.8980392157" alpha="1" colorSpace="calibratedRGB"/>
@@ -99,10 +93,8 @@
                         <constraints>
                             <constraint firstItem="6Zu-lx-WcA" firstAttribute="leading" secondItem="noZ-E7-BAE" secondAttribute="leading" constant="20" id="BUE-YA-RUh"/>
                             <constraint firstItem="noZ-E7-BAE" firstAttribute="trailing" secondItem="6Do-8J-Ia7" secondAttribute="trailing" id="Era-fs-OQi"/>
-                            <constraint firstItem="Iwq-Iu-UXz" firstAttribute="centerX" secondItem="noZ-E7-BAE" secondAttribute="centerX" id="HuS-CE-Vfl"/>
                             <constraint firstItem="DOm-a1-kmL" firstAttribute="top" secondItem="6Zu-lx-WcA" secondAttribute="bottom" constant="18" id="Isc-DJ-yuM"/>
                             <constraint firstItem="6Zu-lx-WcA" firstAttribute="top" secondItem="noZ-E7-BAE" secondAttribute="top" constant="20" id="Kf0-2z-to3"/>
-                            <constraint firstItem="Iwq-Iu-UXz" firstAttribute="centerY" secondItem="noZ-E7-BAE" secondAttribute="centerY" id="PZr-P7-nBZ"/>
                             <constraint firstItem="6Do-8J-Ia7" firstAttribute="leading" secondItem="noZ-E7-BAE" secondAttribute="leading" id="YH7-4S-pgL"/>
                             <constraint firstItem="noZ-E7-BAE" firstAttribute="trailing" secondItem="6Zu-lx-WcA" secondAttribute="trailing" constant="20" id="aJU-z1-B8U"/>
                             <constraint firstItem="6Do-8J-Ia7" firstAttribute="top" secondItem="noZ-E7-BAE" secondAttribute="top" id="hSv-aI-nVw"/>
@@ -113,7 +105,6 @@
                     </view>
                     <connections>
                         <outlet property="mDateRangeLabel" destination="KcY-87-NZd" id="ZzL-xe-Q03"/>
-                        <outlet property="mNoResultLabel" destination="Iwq-Iu-UXz" id="31p-BJ-QWC"/>
                         <outlet property="mSearchBar" destination="6Zu-lx-WcA" id="nv1-8j-yUP"/>
                         <outlet property="mSearchBarBackgroundView" destination="6Do-8J-Ia7" id="7rq-az-nP6"/>
                         <outlet property="mTrendingLabel" destination="DOm-a1-kmL" id="KZ5-Un-Bjm"/>

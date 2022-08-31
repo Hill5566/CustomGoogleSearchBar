@@ -19,7 +19,12 @@ class SearchViewController: UIViewController {
     
     @IBOutlet weak var mDateRangeLabel: UILabel!
     
-    @IBOutlet weak var mNoResultLabel: UILabel!
+    lazy private var mNoResultLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No Result"
+        label.isHidden = true
+        return label
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +32,7 @@ class SearchViewController: UIViewController {
         setupSearchBar()
         setupTagScrollView()
         setupTableView()
+        setupNoResultLabel()
         
         viewModel.searchBarText.bind { [weak self] text in
             guard let self = self else { return }
@@ -53,7 +59,6 @@ class SearchViewController: UIViewController {
             guard let self = self else { return }
             if followers.count == 0 {
                 self.mNoResultLabel.isHidden = false
-                self.view.bringSubviewToFront(self.mNoResultLabel)
             } else {
                 self.mNoResultLabel.isHidden = true
             }
@@ -125,6 +130,15 @@ class SearchViewController: UIViewController {
             mTagScrollView.heightAnchor.constraint(equalToConstant: 60),
             mTagScrollView.leadingAnchor.constraint(equalTo: mTrendingLabel.trailingAnchor, constant: 12),
             mTagScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24)
+        ])
+    }
+    
+    func setupNoResultLabel() {
+        
+        mSearchResultTableView.addSubviewForAutoLayout(mNoResultLabel)
+        NSLayoutConstraint.activate([
+            mNoResultLabel.centerXAnchor.constraint(equalTo: mSearchResultTableView.centerXAnchor, constant: 0),
+            mNoResultLabel.centerYAnchor.constraint(equalTo: mSearchResultTableView.centerYAnchor, constant: 0)
         ])
     }
     
@@ -219,6 +233,10 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionViewModel = viewModel.sectionViewModels.value[section]
         return sectionViewModel.rowViewModels.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

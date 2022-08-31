@@ -62,7 +62,7 @@
                                         <color key="textColor" red="0.49803921569999998" green="0.49803921569999998" blue="0.49803921569999998" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="triangle" translatesAutoresizingMaskIntoConstraints="NO" id="pGW-zd-pQm">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_triangle" translatesAutoresizingMaskIntoConstraints="NO" id="pGW-zd-pQm">
                                         <rect key="frame" x="79" y="5" width="13" height="11"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="13" id="mmr-rs-eZo"/>
@@ -124,7 +124,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="triangle" width="18" height="12"/>
+        <image name="icon_triangle" width="18" height="12"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

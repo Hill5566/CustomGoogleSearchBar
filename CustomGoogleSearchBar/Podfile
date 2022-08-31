@@ -6,8 +6,8 @@ target 'CustomGoogleSearchBar' do
   use_frameworks!
 
   # Pods for CustomGoogleSearchBar
-	
- pod "TTGTagCollectionView"
+  pod 'SDWebImage'
+  pod "TTGTagCollectionView"
 
   target 'CustomGoogleSearchBarTests' do
     inherit! :search_paths

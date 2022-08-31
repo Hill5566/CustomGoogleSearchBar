@@ -82,7 +82,6 @@ class SearchViewController: UIViewController {
         mSearchBarTableView.isHidden = true
         mSearchBarTableView.separatorStyle = .none
         mSearchBarTableView.isScrollEnabled = false
-        mSearchBarTableView.estimatedRowHeight = 40
         mSearchBarTableView.rowHeight = UITableView.automaticDimension
         mSearchBarTableView.borderColor = .hexDEE2E6
         mSearchBarTableView.borderWidth = 2
@@ -133,7 +132,7 @@ class SearchViewController: UIViewController {
         mSearchBarTableViewLayoutHeight.constant = mSearchBarTableView.contentSize.height
     }
     fileprivate func reloadTabScrollView(keywords: [String]) {
-        self.mTagScrollView.removeAllTags()
+        mTagScrollView.removeAllTags()
         for text in keywords {
             let content = TTGTextTagStringContent.init(text: text)
             content.textColor = .hex6C757D
@@ -151,9 +150,9 @@ class SearchViewController: UIViewController {
             tag.style = normalStyle
             tag.selectedStyle = normalStyle
             
-            self.mTagScrollView.addTag(tag)
+            mTagScrollView.addTag(tag)
         }
-        self.mTagScrollView.reload()
+        mTagScrollView.reload()
     }
     
     @IBAction func timeSelectorClick(_ sender: UIButton) {

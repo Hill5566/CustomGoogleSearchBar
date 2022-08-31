@@ -7,4 +7,9 @@ struct DateFormatters {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         return dateFormatter
     }()
+    static let dateFormatter_yyyyMMdd: DateFormatter = {
+        var dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter
+    }()
 }

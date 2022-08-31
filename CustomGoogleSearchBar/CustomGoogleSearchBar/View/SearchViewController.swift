@@ -6,9 +6,9 @@ class SearchViewController: UIViewController {
 
     private let viewModel = SearchViewModel()
     
-    private var viewTable = UITableView()
-    private var viewTableLayoutTop = NSLayoutConstraint()
-    private var contentTableHandler: SearchContentTableHandler!
+    private var mSearchResultTableView = UITableView()
+    private var mSearchResultTableViewLayoutTop = NSLayoutConstraint()
+    private var mSearchResultTableViewDataSource = SearchResultTableViewDataSource([])
 
     @IBOutlet weak var mSearchBarBackgroundView: UIView!
     @IBOutlet weak var mSearchBar: UISearchBar!
@@ -42,7 +42,6 @@ class SearchViewController: UIViewController {
             self.mSearchBarTableView.reloadData()
             self.mSearchBarTableView.layoutIfNeeded()
             self.dynamicSearchBarTableViewHeight()
-//            self.viewTable.reloadData()
         }
 
         viewModel.popularKeywords.bind(fireNow: true) { [weak self] keywords in
@@ -58,14 +57,13 @@ class SearchViewController: UIViewController {
             } else {
                 self.mNoResultLabel.isHidden = true
             }
-            self.contentTableHandler.followers = followers
-            self.viewTable.reloadData()
+            self.mSearchResultTableViewDataSource.followers = followers
+            self.mSearchResultTableView.reloadData()
         }
         
         viewModel.dateRange.bind { [weak self] dateRange in
             guard let self = self else { return }
             self.mDateRangeLabel.text = dateRange.rawValue
-            
         }
     }
     
@@ -87,24 +85,22 @@ class SearchViewController: UIViewController {
         mSearchBarTableView.borderWidth = 2
         mSearchBarTableView.cornerRadius = 4
         
-        viewTable.register(SearchedContentTableViewCell.self, forCellReuseIdentifier: SearchedContentTableViewCell.identifier)
-        contentTableHandler = SearchContentTableHandler(controller: self)
-        viewTable.dataSource = contentTableHandler
-        viewTable.delegate = contentTableHandler
-        viewTable.separatorStyle = .none
+        mSearchResultTableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)
+        mSearchResultTableView.dataSource = mSearchResultTableViewDataSource
+        mSearchResultTableView.separatorStyle = .none
                 
-        view.addSubviewForAutoLayout(viewTable)
+        view.addSubviewForAutoLayout(mSearchResultTableView)
         view.addSubviewForAutoLayout(mSearchBarTableView)
         
-        viewTableLayoutTop = viewTable.topAnchor.constraint(equalTo: mSearchBarBackgroundView.bottomAnchor, constant: 20)
+        mSearchResultTableViewLayoutTop = mSearchResultTableView.topAnchor.constraint(equalTo: mSearchBarBackgroundView.bottomAnchor, constant: 20)
         NSLayoutConstraint.activate([
             mSearchBarTableView.topAnchor.constraint(equalTo: mSearchBar.bottomAnchor, constant: -1),
             mSearchBarTableView.leadingAnchor.constraint(equalTo: mSearchBar.leadingAnchor, constant: 0),
             mSearchBarTableView.trailingAnchor.constraint(equalTo: mSearchBar.trailingAnchor, constant: 0),
-            viewTableLayoutTop,
-            viewTable.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
-            viewTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            viewTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20)
+            mSearchResultTableViewLayoutTop,
+            mSearchResultTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+            mSearchResultTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            mSearchResultTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20)
         ])
         mSearchBarTableViewLayoutHeight = mSearchBarTableView.heightAnchor.constraint(equalToConstant: 60)
         mSearchBarTableViewLayoutHeight.isActive = true
@@ -126,7 +122,7 @@ class SearchViewController: UIViewController {
     }
     
     fileprivate func showTimeSelector() {
-        viewTableLayoutTop.constant = 61
+        mSearchResultTableViewLayoutTop.constant = 61
     }
     fileprivate func dynamicSearchBarTableViewHeight() {
         mSearchBarTableViewLayoutHeight.constant = mSearchBarTableView.contentSize.height

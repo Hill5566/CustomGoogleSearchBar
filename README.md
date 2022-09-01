@@ -1,8 +1,7 @@
 # CustomGoogleSearchBar
 
-以MVVM架構客製Google Search Bar UIUX的作品
+以MVVM架構客製Google Search Bar UIUX的展示作品
 
-透過Github api來搜尋github users, 及其 followers
+使用Github api來搜尋github users, 及其 followers
 
-
-
+Storyboard, xib, 或 純programming 來呈現UI

@@ -148,10 +148,10 @@ class SearchViewController: UIViewController {
     fileprivate func dynamicSearchBarTableViewHeight() {
         mSearchBarTableViewLayoutHeight.constant = mSearchBarTableView.contentSize.height
     }
-    fileprivate func reloadTabScrollView(keywords: [String]) {
+    fileprivate func reloadTabScrollView(keywords: [AirtableKeyword]) {
         mTagScrollView.removeAllTags()
-        for text in keywords {
-            let content = TTGTextTagStringContent.init(text: text)
+        for item in keywords {
+            let content = TTGTextTagStringContent.init(text: item.keyword)
             content.textColor = .hex6C757D
             content.textFont = UIFont.systemFont(ofSize: 16)
             
@@ -220,7 +220,7 @@ extension SearchViewController: UISearchBarDelegate {
 
 extension SearchViewController: TTGTextTagCollectionViewDelegate {
     func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
-        viewModel.loadUserFollowers(name: viewModel.popularKeywords.value[Int(index)])
+        viewModel.loadUserFollowers(name: viewModel.popularKeywords.value[Int(index)].keyword)
     }
 }
 

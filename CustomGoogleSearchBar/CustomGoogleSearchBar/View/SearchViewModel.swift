@@ -1,4 +1,5 @@
 import Foundation
+import SwiftAirtable
 
 class SearchViewModel {
     
@@ -78,13 +79,12 @@ class SearchViewModel {
         UserDefaultManager.default.searchedWordHistories = searchedWordHistories.value
     }
     
-    let popularKeywords:Box<[String]> = Box([])
+    let popularKeywords:Box<[AirtableKeyword]> = Box([])
     func loadSearchPopularKeywords() {
-//        api.getSearchPopular { [weak self] keywords in
-//            guard let self = self, let keywords = keywords else { return }
-//            self.popularKeywords.value = keywords
-//        }
-        self.popularKeywords.value = ["John", "Tom", "Joe", "JoJo"]
+        airtable.fetchAll(table: "CustomGoogleSearchBar") { [weak self] (objects: [AirtableKeyword], error: Error?) in
+            guard let self = self else { return }
+            self.popularKeywords.value = objects
+        }
     }
     
     let followers: Box<[User]> = Box([])
@@ -150,5 +150,11 @@ class SearchViewModel {
         default:
             fatalError("Unexpected view model type: \(viewModel)")
         }
+    }
+}
+
+extension SearchViewModel {
+    var airtable: Airtable {
+        return Airtable(apiKey: "keyBhsjq3k9kvs9bA", apiBaseUrl: "https://api.airtable.com/v0/appaJVavQ12xZZx4A", schema: AirtableKeyword.schema)
     }
 }

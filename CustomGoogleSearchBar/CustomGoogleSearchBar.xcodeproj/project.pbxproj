@@ -60,6 +60,7 @@
 		E99C03BA28BC9EF80094A165 /* SearchBarCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C03B928BC9EF80094A165 /* SearchBarCellViewModel.swift */; };
 		E99C03BC28BC9F9C0094A165 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C03BB28BC9F9C0094A165 /* Protocols.swift */; };
 		E99C03C428BCA6CA0094A165 /* SectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C03C328BCA6CA0094A165 /* SectionViewModel.swift */; };
+		E9CFE04C28C5C1B600880073 /* AirtableKeyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CFE04B28C5C1B600880073 /* AirtableKeyword.swift */; };
 		E9D9733428BF962D00D66359 /* SearchResultCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D9733328BF962D00D66359 /* SearchResultCellViewModel.swift */; };
 		E9E1296B28B89B5200D615D7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E1296A28B89B5200D615D7 /* User.swift */; };
 		F2336AF44E1FA3C3C9936E58 /* Pods_CustomGoogleSearchBarTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A38F3A7E3870462A72942430 /* Pods_CustomGoogleSearchBarTests.framework */; };
@@ -122,6 +123,7 @@
 		E99C03B928BC9EF80094A165 /* SearchBarCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarCellViewModel.swift; sourceTree = "<group>"; };
 		E99C03BB28BC9F9C0094A165 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		E99C03C328BCA6CA0094A165 /* SectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionViewModel.swift; sourceTree = "<group>"; };
+		E9CFE04B28C5C1B600880073 /* AirtableKeyword.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AirtableKeyword.swift; sourceTree = "<group>"; };
 		E9D9733328BF962D00D66359 /* SearchResultCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCellViewModel.swift; sourceTree = "<group>"; };
 		E9E1296A28B89B5200D615D7 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F0FD25EF25F9A716BF4BB5C8 /* Pods-CustomGoogleSearchBarTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CustomGoogleSearchBarTests.release.xcconfig"; path = "Target Support Files/Pods-CustomGoogleSearchBarTests/Pods-CustomGoogleSearchBarTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 		E93C70FB28B895E600FC2078 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E9CFE04D28C5C26800880073 /* Airtable */,
 				E9E1296A28B89B5200D615D7 /* User.swift */,
 				E93C711D28B8966C00FC2078 /* UserDefaultManager.swift */,
 				E93C711928B8966C00FC2078 /* Box.swift */,
@@ -276,6 +279,14 @@
 				E9D9733328BF962D00D66359 /* SearchResultCellViewModel.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		E9CFE04D28C5C26800880073 /* Airtable */ = {
+			isa = PBXGroup;
+			children = (
+				E9CFE04B28C5C1B600880073 /* AirtableKeyword.swift */,
+			);
+			path = Airtable;
 			sourceTree = "<group>";
 		};
 		F3DDE790A52342478DD59AA2 /* Pods */ = {
@@ -554,6 +565,7 @@
 				E99C03BC28BC9F9C0094A165 /* Protocols.swift in Sources */,
 				E93C70CA28B8959500FC2078 /* SceneDelegate.swift in Sources */,
 				E93C711228B8960200FC2078 /* CustomRangeVC.swift in Sources */,
+				E9CFE04C28C5C1B600880073 /* AirtableKeyword.swift in Sources */,
 				E93C711F28B8966C00FC2078 /* Box.swift in Sources */,
 				E93C712828B8966C00FC2078 /* DateRangeSelectorViewModel.swift in Sources */,
 				E99C03C428BCA6CA0094A165 /* SectionViewModel.swift in Sources */,

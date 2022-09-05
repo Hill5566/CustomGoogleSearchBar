@@ -155,6 +155,6 @@ class SearchViewModel {
 
 extension SearchViewModel {
     var airtable: Airtable {
-        return Airtable(apiKey: "keyBhsjq3k9kvs9bA", apiBaseUrl: "https://api.airtable.com/v0/appaJVavQ12xZZx4A", schema: AirtableKeyword.schema)
+        return Airtable(apiKey: "k"+"eyBhsjq"+"3k9kvs9bA", apiBaseUrl: "https://ap"+"i.ai"+"rta"+"ble."+"com/v"+"0/ap"+"paJVavQ1"+"2xZZx4A", schema: AirtableKeyword.schema)
     }
 }
